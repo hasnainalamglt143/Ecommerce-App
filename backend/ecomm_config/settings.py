@@ -37,8 +37,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'store'
+    'tailwind',
+    'store',
+    'cart',
 ]
+
+if DEBUG:
+    INSTALLED_APPS += ['django_browser_reload']
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -50,18 +56,28 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+if DEBUG:
+    # Add django_browser_reload middleware only in DEBUG mode
+    MIDDLEWARE += [
+        "django_browser_reload.middleware.BrowserReloadMiddleware",
+    ]
+
 ROOT_URLCONF = 'ecomm_config.urls'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'store/templates'],
+        'DIRS': [BASE_DIR / 'store/templates',BASE_DIR / 'cart/templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                "context_processors.categories_processor",
+                "context_processors.cart_processor",
+
+
             ],
         },
     },
@@ -125,3 +141,13 @@ MEDIA_ROOT = BASE_DIR / 'media'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+TAILWIND_APP_NAME = 'store'
+
+NPM_BIN_PATH = r"C:\Program Files\nodejs\npm.cmd"
+
+# INTERNAL_IPS = [
+#     "127.0.0.1:8000",
+#     "localhost:8000",
+# ]
